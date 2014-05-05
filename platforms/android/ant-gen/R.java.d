@@ -6,4 +6,9 @@
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/res/values/strings.xml \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/res/drawable-xhdpi/icon.png \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/res/xml/config.xml \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/res/drawable/icon.png \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/res/drawable-ldpi/icon.png \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/res/drawable-mdpi/icon.png \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/res/drawable-hdpi/icon.png \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/res/drawable-xhdpi/icon.png \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/AndroidManifest.xml \
