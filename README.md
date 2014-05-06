@@ -2,16 +2,16 @@
 
 ###### Ansicht: Nächste Fahrten bzw. Ziele
 
-![Alt text](https://i.imgur.com/f6RozF1.png "Nächste Fahrten")
+![Alt text](/screens/next_rides.png?raw=true "Nächste Fahrten")
 
 ###### Ansicht: Aktuelle Fahrt
 
-![Alt text](https://i.imgur.com/qBu7FDi.png "Aktuelle Fahrt")
+![Alt text](/screens/current_ride.png?raw=true "Aktuelle Fahrt")
 
 ###### Ansicht: Spontane Fahrt
 
-![Alt text](https://i.imgur.com/lgRlgjc.png "Spontane Fahrt")
+![Alt text](/screens/new_ride.png?raw=true "Spontane Fahrt")
 
 ###### Ansicht: Menü
 
-![Alt text](https://i.imgur.com/Vi6kjPF.png "Menü")
+![Alt text](/screens/side_menu.png?raw=true "Menü")
