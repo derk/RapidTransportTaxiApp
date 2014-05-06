@@ -1,4 +1,4 @@
-<ion-view title="Nächste Ziele">
+<ion-view title="Spontane Fahrt">
   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons>
@@ -8,14 +8,14 @@
       <form ng-submit="createRide(ride)">
         <div class="list">
           <label class="item item-input">
-            <input type="text" placeholder="Where do you start?" ng-model="ride.start">
+            <input type="text" placeholder="Wo soll es los gehen?" ng-model="ride.start">
           </label>
           <label class="item item-input">
-            <input type="text" placeholder="Where do you end?" ng-model="ride.end">
+            <input type="text" placeholder="Wo soll es hin gehen?" ng-model="ride.end">
           </label>
         </div>
         <div class="padding">
-          <button type="submit" class="button button-block button-positive">Create ride</button>
+          <button type="submit" class="button button-block button-positive">Fertig</button>
         </div>
       </form>
   </ion-content>
