@@ -92,10 +92,14 @@
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/img/ionic.png \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/css/style.css \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/templates/rides-current.html \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/templates/pause.html \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/templates/rides-next.html \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/templates/rides-new.html \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/templates/menu.html \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/templates/employee.html \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/js/app.js \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/js/services.js \
+/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/js/ngAutocomplete.js \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/js/controllers.js \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/plugins/org.apache.cordova.statusbar \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/plugins/org.apache.cordova.device \
