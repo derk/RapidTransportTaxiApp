@@ -1,9 +1,35 @@
 <ion-view title="Aktuelle Fahrt">
   <ion-content class="has-header">
-    <!-- <h1>Informationen über die Aktuelle Fahrt</h1> 
-    <a href="#/app/next-rides">Nächste Fahrten</a> -->
-    <p>ID: {{ rideID }}</p>
-    <p>Start: {{ ride.start }}</p>
-    <p>Ziel: {{ ride.end }}</p>
+    <div class="card">
+	  	<div class="item item-divider">
+	    	Zeit
+	  	</div>
+	  	<div class="item item-text-wrap">
+			<b>Beginn der Fahrt:</b> {{ride.TimeStart}}
+	  	</div>
+	  	<div class="item item-divider">
+	    	Weg
+	  	</div>
+	  	<div class="item item-text-wrap">
+			<b>Ziel:</b> {{ride.DestinationName}}
+	  	</div>
+
+	  	<div class="item item-divider">
+	    	Kosten
+	  	</div>
+	  	<div class="item item-text-wrap">
+			<b>Geschätzt:</b> {{ride.CostEstimated}}<br>
+			<b>Endgültig:</b> {{ride.CostFinal}}
+	  	</div>
+  		<div class="item item-divider">
+    		Staumeldungen
+  		</div>
+  		<div class="item item-text-wrap">
+			Auf der Route sind keine Verzögerungen in Sicht.
+  		</div>
+		<button ng-click=go() class="button button-full {{goStyle}}">
+			{{goLabel}}
+		</button>
+	</div>
   </ion-content>
 </ion-view>

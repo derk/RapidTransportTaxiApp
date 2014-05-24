@@ -56,6 +56,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
 
+    .state('app.driver', {
+      url: "/employee",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/employee.html",
+          controller: 'EmployeeCtrl'
+        }
+      }
+    })
+
     .state('app.pause', {
       url: "/pause",
       views: {

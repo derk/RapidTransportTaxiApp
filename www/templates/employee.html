@@ -1,0 +1,9 @@
+<ion-view title="Fahrer">
+  <ion-content class="has-header">
+	  <ion-list>
+	  <ion-item ng-repeat="employee in employees" ng-click="select({{employee.Id}})">
+	    {{employee.FirstName}}, {{employee.LastName}}
+	  </ion-item>
+	</ion-list>
+  </ion-content>
+</ion-view>
