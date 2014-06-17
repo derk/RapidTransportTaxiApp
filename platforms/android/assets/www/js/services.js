@@ -3,7 +3,7 @@ angular.module('starter.services', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('Rides', function() {
+.factory('Rides', function($http, Employees) {
   var currentRide;
   var rideGoing = false;
   // Might use a resource here that returns a JSON array
@@ -15,6 +15,7 @@ angular.module('starter.services', [])
     { startName: 'Hochschule, Offenburg', DestinationName: 'Philips, Böblingen', JobId: 2},
     { startName: 'Flughafen, Berlin', DestinationName: 'Brandenburger Tor, Berlin', JobId: 3}
   ];*/
+  //var rides = [];
   var rides = [
     {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.4575030028,"StartLocationLongitude":7.9308330920,"DestinationLocationLatitude":48.7916284706,"DestinationLocationLongitude":7.9945915375,"DestinationName":"2 Rue Jean Frédéric Oberlin, 67770 Sessenheim, France","JourneyLength":34,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395218814000)","PreferredDeparture":"Date(1395216343807)","CostsEstimated":118.80,"Telephone":"06344\/24690121","JobId":13560},
     {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.5249721827,"StartLocationLongitude":7.9477011297,"DestinationLocationLatitude":48.5052669994,"DestinationLocationLongitude":8.3489251402,"DestinationName":"Bergerweg 84, 72270 Baiersbronn, Germany","JourneyLength":45,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395233362000)","PreferredDeparture":"Date(1395230544147)","CostsEstimated":123.20,"Telephone":"0176\/85903705","JobId":13596},
@@ -32,7 +33,18 @@ angular.module('starter.services', [])
      * Queries the webservice via the REST api for rides
      */
     all: function() {
-      return rides;
+      var reqUrl = 'http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetJobs/' + Employees.getCurrentId();
+      console.log('Requesting jobs for Id: '+ Employees.getCurrentId());
+      console.log("Request url: " + reqUrl);
+      $http.get(reqUrl)
+        .then(function(result) {
+          console.log('Result:');
+          console.log(result.data);
+          rides = JSON.parse(result.data);
+      });
+        console.log("Parsed rides:");
+        console.log(rides);
+        return rides;
     },
     /*
      * Returns the ride with the jobID passed in
@@ -64,25 +76,26 @@ angular.module('starter.services', [])
 })
 
 .factory('Employees', function($http) {
-  var employeeID;
+  var employeeId = 0;
   //var employees = [];
   var employees = JSON.parse("[{\"Id\":30,\"FirstName\":\"Long!\",\"LastName\":\"Don\"},{\"Id\":31,\"FirstName\":\"Big\",\"LastName\":\"Jim\"},{\"Id\":32,\"FirstName\":\"Donovan\",\"LastName\":\"Day\"},{\"Id\":33,\"FirstName\":\"Hiram.\",\"LastName\":\"Brooks\"},{\"Id\":34,\"FirstName\":\"Hasad\",\"LastName\":\"Reynolds\"},{\"Id\":35,\"FirstName\":\"Tyrone\",\"LastName\":\"Anthony\"},{\"Id\":36,\"FirstName\":\"Xavier\",\"LastName\":\"Jacobson\"},{\"Id\":38,\"FirstName\":\"Nissim\",\"LastName\":\"Pearson\"},{\"Id\":39,\"FirstName\":\"Berk\",\"LastName\":\"Savage\"},{\"Id\":40,\"FirstName\":\"Theodore\",\"LastName\":\"Luna\"},{\"Id\":41,\"FirstName\":\"Tanek\",\"LastName\":\"Forbes\"},{\"Id\":42,\"FirstName\":\"Samson\",\"LastName\":\"Burgess\"},{\"Id\":43,\"FirstName\":\"Jerome\",\"LastName\":\"Kerr\"},{\"Id\":44,\"FirstName\":\"Keaton\",\"LastName\":\"Haynes\"},{\"Id\":45,\"FirstName\":\"Peter\",\"LastName\":\"Beasley\"},{\"Id\":46,\"FirstName\":\"Jerry\",\"LastName\":\"Cooper\"},{\"Id\":47,\"FirstName\":\"Lance\",\"LastName\":\"James\"},{\"Id\":48,\"FirstName\":\"Richard\",\"LastName\":\"Brown\"},{\"Id\":49,\"FirstName\":\"Rafael\",\"LastName\":\"Thompson\"},{\"Id\":50,\"FirstName\":\"Basil\",\"LastName\":\"Calderon\"},{\"Id\":11587,\"FirstName\":\"Rogan\",\"LastName\":\"Whitney\"},{\"Id\":11590,\"FirstName\":\"Noah\",\"LastName\":\"Holmes\"},{\"Id\":11591,\"FirstName\":\"Hamish\",\"LastName\":\"Mullen\"},{\"Id\":11592,\"FirstName\":\"Caesar\",\"LastName\":\"Adkins\"},{\"Id\":11593,\"FirstName\":\"Levi\",\"LastName\":\"Smith\"},{\"Id\":11679,\"FirstName\":\"Max\",\"LastName\":\"Mustermann\"},{\"Id\":11680,\"FirstName\":\"Maxii\",\"LastName\":\"Master\"},{\"Id\":11681,\"FirstName\":\"Simon\",\"LastName\":\"Danner\"},{\"Id\":11682,\"FirstName\":\"Simon\",\"LastName\":\"Danner\"}]")
   return {
-    /*all: function() {
+    all: function() {
       //http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetEmployees
       //http://localhost:26967/Services/RapidTransportService.svc/GetEmployees
       $http.get('http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetEmployees')
         .then(function(result) {
           employees = JSON.parse(result.data);
       });
-    }*/
-    all: function() {
-      console.log(employees);
-      return employees;
+        //console.log(employees);
+        return employees;
     },
-    select: function(eID) {
-      employeeId = eID;
-      console.log('Selected Employee with ID: '+ employeeID);
+    getCurrentId: function() {
+      return employeeId;
+    },
+    select: function(id) {
+      employeeId = Number(id);
+      console.log('Employees Service: selected employee with id: '+ employeeId);
     }
   }
 });

@@ -4,7 +4,7 @@
   </ion-nav-buttons>
   <ion-content class="has-header">
     <ion-list>
-      <ion-item ng-repeat="ride in rides" href="#/app/current-ride/{{ride.JobId}}">
+      <ion-item ng-repeat="ride in ridesData track by $index" href="#/app/current-ride/{{ride.JobId}}">
         <span class="icon ion-model-s"> {{ride.DestinationName}}
       </ion-item>
     </ion-list>

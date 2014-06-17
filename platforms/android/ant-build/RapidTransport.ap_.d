@@ -13,7 +13,6 @@
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/ant-build/res/drawable-xhdpi/icon.png \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/_where-is-www.txt \
-/home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/npm-debug.log \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/lib \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/index.html \
 /home/dice/Projects/Projekt 2/RapidTransportTaxiApp/platforms/android/assets/www/README.md \

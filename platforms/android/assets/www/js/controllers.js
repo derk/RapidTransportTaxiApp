@@ -48,14 +48,6 @@ angular.module('starter.controllers', ['ngAutocomplete'])
 })
 
 .controller('NewRideCtrl', function($scope, $stateParams, $location, Rides) {
-
-  $scope.result1 = '';
-  $scope.options1 = {
-    country: 'de',
-    types: 'geocode'
-  };
-  $scope.details1 = '';
-
   $scope.resultEnd = '';
   $scope.optionsEnd = {
     country: 'de',
@@ -86,6 +78,7 @@ angular.module('starter.controllers', ['ngAutocomplete'])
 .controller('EmployeeCtrl', function($scope, $stateParams, $location, Employees) {
   $scope.employees = Employees.all();
   $scope.select = function(employeeID) {
+    //console.log(employeeID);
     Employees.select(employeeID);
     $location.path('/#/app/next-rides');
   }

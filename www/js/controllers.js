@@ -3,16 +3,14 @@ angular.module('starter.controllers', ['ngAutocomplete'])
 
 .controller('AppCtrl', function($scope) {
   $scope.rideGoing = false;
-  //$scope.rideGoing = false;
 })
 
 .controller('NextRidesCtrl', function($scope, Rides) {
-  $scope.rides = Rides.all();
-  /*for (var i = 0; $scope.rides.length; i++) {
-    var element = $scope.rides[i];
-    addrArr = element.DestinationName.split(",");
-    ($scope.rides[i])['tokens'] = addrArr;
-  }*/
+  Rides.all().then(function(d) {
+    $scope.ridesData = d;
+    console.log('Data in controller:');
+    console.log($scope.ridesData);
+  });
 })
 
 .controller('CurrentRideCtrl', function($scope, $stateParams, $location, Rides) {
@@ -39,12 +37,11 @@ angular.module('starter.controllers', ['ngAutocomplete'])
   }
   $scope.go = function() {
     if ($scope.goLabel == 'Stop') {
-      $location.path('/#/app/next-rides');
+      $location.path('/app/next-rides');
     }
     $scope.goStyle = 'button-assertive';
     $scope.goLabel = 'Stop';
   }
-  //console.log($scope.ride);
 })
 
 .controller('NewRideCtrl', function($scope, $stateParams, $location, Rides) {
@@ -68,23 +65,29 @@ angular.module('starter.controllers', ['ngAutocomplete'])
     //console.log($scope.passengers);
     console.log('Passengers '+ passengers)
     //$location.path('/#/app/next-rides');
-    $location.path('/#/app/current-ride/0');
+    $location.path('/app/current-ride/0');
   }
-	//var rideID = $routeParams.rideID;
-	//var currentRide = $scope.rides[rideID]
-	
+
+  $scope.submit = function() {
+    ride = {"EmployeeId" : 42, "TaxiId" : 43, "Destination" : "Offenburg", "Start" : "Lahr", "CountPassengers" : 2, "Status" : "HeadingToDestination"};
+    Rides.add(ride).then(function(response) {
+      console.log("new ride ctrl response:");
+      console.log(response);
+    });
+  }
 })
 
 .controller('EmployeeCtrl', function($scope, $stateParams, $location, Employees) {
-  $scope.employees = Employees.all();
+  Employees.all().then(function(response) {
+    $scope.employees = JSON.parse(JSON.parse(response));
+  });
   $scope.select = function(employeeID) {
+    //console.log(employeeID);
     Employees.select(employeeID);
-    $location.path('/#/app/next-rides');
+    $location.path('/app/next-rides');
   }
 })
 
 .controller('PauseCtrl', function($scope) {
 
-})
-
-//http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetEmployees 
+});
