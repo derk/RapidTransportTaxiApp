@@ -1,0 +1,27 @@
+<ion-view title="Schichtplan">
+	<ion-nav-buttons side="left">
+		<button class="button button-icon" ng-click="newWeek()">
+			Neue Woche beginnen
+		</button>
+	</ion-nav-buttons>
+	<ion-content class="has-header">
+		<div class="card">
+			<div ng-repeat="shift in shifts track by $index">
+				<div class="item item-divider">
+	    			{{shift.dayName}}
+	  			</div>
+				<div class="item item-text-wrap">
+					Beginn: {{shift.startDate | date : 'medium'}}<br>
+					Ende: {{shift.endDate | date : 'medium'}}<br>
+					Anzahl der Pausen: {{shift.pauseCount}}
+					<button class="button button-block button-positive" ng-click="beginShift($index)">
+						Schicht beginnen
+					</button>
+					<button class="button button-block button-positive" ng-click="endShift($index)">
+						Schicht beenden
+					</button>
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

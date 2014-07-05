@@ -1,0 +1,11 @@
+<ion-view title="Fahrer">
+  <ion-content class="has-header">
+  	<ion-refresher pulling-text="Ziehen zum Aktualisieren..." on-refresh="doRefresh()">
+  	</ion-refresher>
+	<ion-list>
+		<ion-item ng-repeat="employee in employees" ng-click="select(employee.Id)">
+	    {{employee.FirstName}}, {{employee.LastName}} ({{ employee.Id }})
+		</ion-item>
+	</ion-list>
+  </ion-content>
+</ion-view>

@@ -2,8 +2,13 @@
   <ion-content class="has-header">
 	<div class="card">
   		<div class="item item-text-wrap">
-    		Ihre letzte Pause liegt schon lange zurück, nehmen sie sich 15 Minuten frei!
+    		<p>Ihre letzte Pause liegt schon länger als drei Stunden zurück, nehmen sie sich 15 Minuten frei!<p>
+    		<p>Beginn der Pause: {{pause.start | date : 'medium'}}
+    		<p>Verbleibende Pausenzeit (Sekunden): {{ secondsRemaining }}
   		</div>
+	</div>
+	<div class="padding">
+		<button class="button button-block button-positive" ng-click="beginPause()">Pause beginnen</button>
 	</div>
   </ion-content>
 </ion-view>

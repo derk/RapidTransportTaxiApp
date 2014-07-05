@@ -1,101 +1,374 @@
-angular.module('starter.services', [])
+angular.module('rapidTransport.services', [])
+
 
 /**
- * A simple example service that returns some data.
+ * Factory for handling jobs (query, add, update)
  */
-.factory('Rides', function($http, Employees) {
-  var currentRide;
-  var rideGoing = false;
-  // Might use a resource here that returns a JSON array
+.factory('Jobs', function($http, Driver, JobStatus) {
+  var jobs;
+  var promise;
 
-  // Some fake testing data
-  /*var rides = [
-    { startName: 'Alexanderplatz, Berlin', DestinationName: 'Hauptbahnhof, Berlin', JobId: 0},
-    { startName: 'Messe, Frankfurt', DestinationName: 'Hauptbahnhof, Frankfurt', JobId: 1},
-    { startName: 'Hochschule, Offenburg', DestinationName: 'Philips, Böblingen', JobId: 2},
-    { startName: 'Flughafen, Berlin', DestinationName: 'Brandenburger Tor, Berlin', JobId: 3}
-  ];*/
-  //var rides = [];
-  var rides = [
-    {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.4575030028,"StartLocationLongitude":7.9308330920,"DestinationLocationLatitude":48.7916284706,"DestinationLocationLongitude":7.9945915375,"DestinationName":"2 Rue Jean Frédéric Oberlin, 67770 Sessenheim, France","JourneyLength":34,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395218814000)","PreferredDeparture":"Date(1395216343807)","CostsEstimated":118.80,"Telephone":"06344\/24690121","JobId":13560},
-    {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.5249721827,"StartLocationLongitude":7.9477011297,"DestinationLocationLatitude":48.5052669994,"DestinationLocationLongitude":8.3489251402,"DestinationName":"Bergerweg 84, 72270 Baiersbronn, Germany","JourneyLength":45,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395233362000)","PreferredDeparture":"Date(1395230544147)","CostsEstimated":123.20,"Telephone":"0176\/85903705","JobId":13596},
-    {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.6310208708,"StartLocationLongitude":8.3575376845,"DestinationLocationLatitude":48.5704803544,"DestinationLocationLongitude":7.9916796587,"DestinationName":"Landstraße, 77767 Appenweier, Germany","JourneyLength":41,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395234988000)","PreferredDeparture":"Date(1395233752917)","CostsEstimated":101.20,"Telephone":"07715\/32096961","JobId":13602},
-    {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.5002537300,"StartLocationLongitude":8.0124947255,"DestinationLocationLatitude":48.5731321050,"DestinationLocationLongitude":8.2421313864,"DestinationName":"Alte Seekopfhütte 1, 77889 Seebach, Germany","JourneyLength":38,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395239494000)","PreferredDeparture":"Date(1395238295507)","CostsEstimated":105.60,"Telephone":"0152\/70567119","JobId":13611},
-    {"Status":"Finished","EmployeeId":30,"StartLocationLatitude":48.5349394533,"StartLocationLongitude":8.0720618657,"DestinationLocationLatitude":48.8597935249,"DestinationLocationLongitude":8.2378863182,"DestinationName":"Untere Wiesen 8, 76437 Rastatt, Germany","JourneyLength":29,"OrderDate":"Date(1395183600000)","ArrivalEstimated":"Date(1395259160000)","PreferredDeparture":"Date(1395259477567)","CostsEstimated":121.00,"Telephone":"07394\/52492834","JobId":13650}
-  ];
+  var fixDates = function(job) {
+    job.OrderDate = new Date(Date.parse(job.OrderDate));
+    job.ArrivalEstimated = new Date(Date.parse(job.ArrivalEstimated));
+    job.PreferredDeparture = new Date(Date.parse(job.PreferredDeparture));
+    return job;
+  };
 
-  /*
+  var init = function() {
+    var url = 'http://hsogprojekt.noip.me/rapid/api/jobs/' + Driver.getEmployeeId();
+    //var url ='json/jobs_41.json';
+    console.log('Requesting jobs for Id: '+ Driver.getEmployeeId());
+    console.log("Request url: " + url);
+    promise = $http.get(url).then(function(response) {
+      // The then function here is an opportunity to modify the response
+      // The return value gets picked up by the then in the controller.
+      jobs = response.data;
+      // convert dates from strings to objects
+      for (var i = 0; i < jobs.length; i++) {
+        fixDates(jobs[i]);
+      }
+      if(jobs.length >= 1) {
+        Driver.setTaxiId(jobs[0].TaxiId); // grab id from first job in jobs array
+      }
+      return jobs;
+    });
+  };
 
-   */
+  var getIndexOf = function(jobId) {
+    console.log("getIndexOf : " + jobId);
+    for (var i = 0; i < jobs.length; i++)
+    {
+      if (jobs[i].JobId == jobId) {
+        return i;
+      }
+    }
+  };
+
+  var remove = function(job) {
+    var index = getIndexOf(job.JobId);
+    var elemRemoved = jobs.splice(index, 1);
+    console.log("Jobs: removed element");
+    console.log(elemRemoved);
+  };
 
   return {
     /*
-     * Queries the webservice via the REST api for rides
+     * Queries the webservice via the REST api for jobs
      */
     all: function() {
-      var reqUrl = 'http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetJobs/' + Employees.getCurrentId();
-      console.log('Requesting jobs for Id: '+ Employees.getCurrentId());
-      console.log("Request url: " + reqUrl);
-      $http.get(reqUrl)
-        .then(function(result) {
-          console.log('Result:');
-          console.log(result.data);
-          rides = JSON.parse(result.data);
-      });
-        console.log("Parsed rides:");
-        console.log(rides);
-        return rides;
-    },
-    /*
-     * Returns the ride with the jobID passed in
-     */
-    get: function(jobID) {
-      // Simple index lookup
-      // TODO: change lookup method later
-      for (var i = 0; i < rides.length; i++)
-      {
-        if (rides[i].JobId == jobID) {
-          return rides[i];
-        }
+      if(!promise) {
+        init();
       }
+      // Return the promise to the controller
+      return promise;
+    },
+    refresh: function() {
+      init();
+      return promise;
     },
     /*
-     * Add spontaneous ride
+     * Returns the job with the jobId passed in
      */
-    add: function(ride) {
-      // send data to server
-      // get id in return
-      // then push the ride with the valid id
-      //ride.id = "-1"
-      rides.push(ride);
+    get: function(jobId) {
+      console.log("Get job with id: " + jobId);
+      return jobs[getIndexOf(jobId)];
     },
-    selectRide: function(JobId) {
-
+    /*
+     * Add spontaneous job
+     * Does a POST http request
+     */
+    add: function(job) {
+      //var url = "http://localhost:26968/api/jobs/";
+      var url = "http://hsogprojekt.noip.me/rapid/api/jobs";
+      console.log("Going to POST this new job:");
+      console.log(job);
+      //config = { method: "POST", url: "http://hsogprojekt.noip.me/rapid/api/jobs", data: job}
+      var promise = $http.post(url, job);
+      promise.then(function(response) {
+        console.log("Add job response");
+        console.log(response);
+        if("Created" == response.statusText) {
+          var job = fixDates(response.data);
+          jobs.push(job);
+        }
+        return response;
+      });
+      return promise;
+    },
+    /*
+     * update the current job
+     * Does a PUT http request
+     */
+    update: function(job) {
+      var jobUpdate = { Status : job.Status };
+      // only the update setting Status = "Finished"  needs these
+      if (job.CostsReal) jobUpdate.CostsReal = job.CostsReal;
+      if (job.Arrival) jobUpdate.Arrival = job.Arrival.toISOString();
+      if (job.Departure) jobUpdate.Departure = job.Departure.toISOString();
+      console.log("Updating job status:");
+      console.log(jobUpdate);
+      // update on server
+      // reflect changes in app
+      url = 'http://hsogprojekt.noip.me/rapid/api/jobs/';
+      return $http.put(url + job.JobId, jobUpdate)
+      .success(function(data, status, headers, config) {
+        if(JobStatus.Finished == jobUpdate.Status) {
+          remove(job);
+        }
+      });
     }
-  }
+  };
 })
 
 .factory('Employees', function($http) {
-  var employeeId = 0;
-  //var employees = [];
-  var employees = JSON.parse("[{\"Id\":30,\"FirstName\":\"Long!\",\"LastName\":\"Don\"},{\"Id\":31,\"FirstName\":\"Big\",\"LastName\":\"Jim\"},{\"Id\":32,\"FirstName\":\"Donovan\",\"LastName\":\"Day\"},{\"Id\":33,\"FirstName\":\"Hiram.\",\"LastName\":\"Brooks\"},{\"Id\":34,\"FirstName\":\"Hasad\",\"LastName\":\"Reynolds\"},{\"Id\":35,\"FirstName\":\"Tyrone\",\"LastName\":\"Anthony\"},{\"Id\":36,\"FirstName\":\"Xavier\",\"LastName\":\"Jacobson\"},{\"Id\":38,\"FirstName\":\"Nissim\",\"LastName\":\"Pearson\"},{\"Id\":39,\"FirstName\":\"Berk\",\"LastName\":\"Savage\"},{\"Id\":40,\"FirstName\":\"Theodore\",\"LastName\":\"Luna\"},{\"Id\":41,\"FirstName\":\"Tanek\",\"LastName\":\"Forbes\"},{\"Id\":42,\"FirstName\":\"Samson\",\"LastName\":\"Burgess\"},{\"Id\":43,\"FirstName\":\"Jerome\",\"LastName\":\"Kerr\"},{\"Id\":44,\"FirstName\":\"Keaton\",\"LastName\":\"Haynes\"},{\"Id\":45,\"FirstName\":\"Peter\",\"LastName\":\"Beasley\"},{\"Id\":46,\"FirstName\":\"Jerry\",\"LastName\":\"Cooper\"},{\"Id\":47,\"FirstName\":\"Lance\",\"LastName\":\"James\"},{\"Id\":48,\"FirstName\":\"Richard\",\"LastName\":\"Brown\"},{\"Id\":49,\"FirstName\":\"Rafael\",\"LastName\":\"Thompson\"},{\"Id\":50,\"FirstName\":\"Basil\",\"LastName\":\"Calderon\"},{\"Id\":11587,\"FirstName\":\"Rogan\",\"LastName\":\"Whitney\"},{\"Id\":11590,\"FirstName\":\"Noah\",\"LastName\":\"Holmes\"},{\"Id\":11591,\"FirstName\":\"Hamish\",\"LastName\":\"Mullen\"},{\"Id\":11592,\"FirstName\":\"Caesar\",\"LastName\":\"Adkins\"},{\"Id\":11593,\"FirstName\":\"Levi\",\"LastName\":\"Smith\"},{\"Id\":11679,\"FirstName\":\"Max\",\"LastName\":\"Mustermann\"},{\"Id\":11680,\"FirstName\":\"Maxii\",\"LastName\":\"Master\"},{\"Id\":11681,\"FirstName\":\"Simon\",\"LastName\":\"Danner\"},{\"Id\":11682,\"FirstName\":\"Simon\",\"LastName\":\"Danner\"}]")
+  var promise;
+
+  var init = function() {
+    promise = $http.get('http://hsogprojekt.noip.me/rapid/api/employees')
+      .then(function(response) {
+        return response.data;
+      });
+  }
   return {
     all: function() {
-      //http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetEmployees
-      //http://localhost:26967/Services/RapidTransportService.svc/GetEmployees
-      $http.get('http://hsogprojekt.noip.me/Rapid/Services/RapidTransportService.svc/GetEmployees')
-        .then(function(result) {
-          employees = JSON.parse(result.data);
-      });
-        //console.log(employees);
-        return employees;
+      if(!promise) {
+        init();
+      }
+      return promise;
     },
-    getCurrentId: function() {
-      return employeeId;
+    refresh: function() {
+      init();
+      return promise;
+    }
+  };
+})
+
+.factory('Driver', function(TaxiStatus) {
+  // init
+  this.employeeId = 0;
+  this.taxiId = 0;
+  this.taxiStatus = TaxiStatus.Waiting;
+  this.waitingSince = new Date();
+  return  {
+    getEmployeeId: function() {
+      return this.employeeId;
     },
-    select: function(id) {
-      employeeId = Number(id);
-      console.log('Employees Service: selected employee with id: '+ employeeId);
+    setEmployeeId: function(employeeId) {
+      this.employeeId = employeeId;
+      console.log("Selected employeeId = "+ employeeId)
+    },
+    getTaxiId: function() {
+      return this.taxiId;
+    },
+    setTaxiId: function(taxiId) {
+      this.taxiId = taxiId;
+      console.log("Selected taxiId = "+ taxiId)
+    },
+    setTaxiStatus: function(status) {
+      this.taxiStatus = status;
+      console.log("taxiStatus = " + status);
+    },
+    getTaxiStatus: function() {
+      return this.taxiStatus;
+    },
+    waitingSinceFifteenMinutes: function() {
+      var before = moment(this.waitingSince);
+      var now = moment();
+      var res = moment.duration(now - before);
+      return (res.asMinutes() >=15);
+    }
+  };
+})
+
+.factory('Pause', function($location, $timeout, TaxiStatus) {
+  function Pause() {
+  }
+  Pause.prototype.lastPauseBegin = function(date) {
+    this.lastPauseBegin = date;
+  }
+  Pause.prototype.lastPauseEnd = function(date) {
+    this.lastPauseEnd = date;
+  }
+  var counter = 0;
+  var running = false;
+  var promise;
+  var poller = function() {
+    if(doPause()) {
+      console.log("Pause check true")
+      $location.path('/app/pause');
+    } else {
+      console.log("Pause check false")
+      $location.path('/');
+    }
+    promise = $timeout(poller, 5000); // waittime in milliseconds before next execution
+  }
+  var doPause = function() {
+    if (Driver.taxiStatus() == TaxiStatus.Waiting) {
+      // how long is it waiting? ()
+      // > 15 minutes -> set last pause
+      // < 15 minutes -> check last pause end
+        // more than 3 hours ago?
+          // make a pause
     }
   }
+  return {
+    start: function() {
+      running = true;
+      poller();
+    },
+    stop: function() {
+      if (running && promise) {
+        running = false;
+        $timeout.cancel(promise);
+      }
+    },
+    isRunning: function() {
+      return running;
+    }
+  };
+})
+
+// handles updating the current position of the taxi
+.factory('Position', function($http, Driver) {
+  // initialize to coordinates of
+  // "Badstraße 2477652 Offenburg Deutschland"
+  var lastKnownPosition = {
+    "Latitude" : 48.4601021,
+    "Longitude" : 7.942568199999982
+  };
+  var url = 'http://hsogprojekt.noip.me/rapid/api/positions/';
+  return {
+    update: function(latitude, longitude) {
+      lastKnownPosition.Latitude = latitude;
+      lastKnownPosition.Longitude = longitude;
+      console.log("Updating position of taxi " + Driver.getTaxiId() +
+        " to lat " + latitude +
+        " and lng " + longitude);
+      return $http.put(url + Driver.getTaxiId(), lastKnownPosition);
+    },
+    current: function() {
+      return lastKnownPosition;
+    }
+  };
+})
+
+// queries the google maps api to get a route
+// for a specified start and destination
+.factory('GoogleMaps', function($q) {
+  return {
+    getRoute: function(startLocation, destinationLocation) {
+      var q = $q.defer();
+      var directionsService = new google.maps.DirectionsService();
+
+      var request = {
+        origin: new google.maps.LatLng(startLocation.Latitude, startLocation.Longitude),
+        destination: new google.maps.LatLng(destinationLocation.Latitude, destinationLocation.Longitude),
+        waypoints: [],
+        provideRouteAlternatives: false,
+        travelMode: google.maps.TravelMode.DRIVING,
+        unitSystem: google.maps.UnitSystem.METRIC
+      };
+
+      console.log("New route was requested!");
+      console.log("Request:");
+      console.log(request);
+
+      directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+          var route = response.routes[0];
+          
+          console.log("GooleMaps service new route received:");
+          console.log(route);
+          q.resolve(route);
+        } else {
+          var msg = "Something went wrong, could not get a route!";
+          q.resolve(msg);
+        }
+      });
+      return q.promise;
+    }
+  };
+})
+
+.factory('ShiftManager', function() {
+  function Pause() {
+    this.start = null;
+    this.end = null;
+  }
+  Pause.prototype.setStart = function(startDate) {
+    this.start = startDate;
+  }
+  Pause.prototype.setEnd= function(endDate) {
+    this.end = endDate;
+  }
+  Pause.prototype.pauseMoreThanThreeHoursAgo = function() {
+    var pauseEnd = moment(this.end);
+    var now = moment();
+    var res = moment.duration(now - pauseEnd);
+    console.log("result");
+    console.log(res.asHours());
+    if(res.asHours() >= 3) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function Shift(dayName) {
+    this.dayName  = dayName;
+    this.started = false;
+    this.startDate = null;
+    this.endDate = null;
+    this.pauseCount = 0;
+    this.lastPause = null;
+  }
+  Shift.prototype.addPause = function(pause) {
+    this.lastPause = pause;
+    this.pauseCount++;
+  };
+  Shift.prototype.begin = function() {
+    this.startDate = new Date();
+    this.started = true;
+    var dummyPause = new Pause();
+    var now = new Date();
+    dummyPause.setStart(now);
+    dummyPause.setStart(now);
+    this.lastPause = dummyPause;
+  }
+  Shift.prototype.end = function() {
+      this.endDate = new Date();
+  }
+  Shift.prototype.lengthLimitReached = function() {
+    var shiftBegin = moment(this.startDate);
+    var now = moment();
+    var res = moment.duration(now - shiftBegin);
+    if (res.asHours() >= 8) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  var currentShift = null;
+
+  var weekShifts = []; // arr of type Shift
+  return {
+    beginNewWeek: function() {
+      var days = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+      for (var i = 0; i < days.length; i++) {
+        weekShifts[i] = new Shift(days[i]);
+      }
+      return weekShifts;
+    },
+    newPause: function() {
+      return new Pause();
+    },
+    setCurrentShift: function(shift) {
+      currentShift = shift;
+    },
+    getCurrentShift: function() {
+      return currentShift;
+    }
+  };
 });

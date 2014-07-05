@@ -1,10 +1,10 @@
-// Ionic Starter App
+// Ionic rapidTransport App
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
-// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
+// 'rapidTransport' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-// 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+// 'rapidTransport.controllers' is found in controllers.js
+angular.module('rapidTransport', ['ionic', 'rapidTransport.controllers', 'rapidTransport.services', 'rapidTransport.constants'])
 
 
 .run(function($ionicPlatform) {
@@ -14,6 +14,17 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       StatusBar.styleDefault();
     }
   });
+})
+
+.run(function(Pause) {
+  //Pause.start();
+})
+
+// avoid caching templates/partials in the browser
+.run(function($rootScope, $templateCache) {
+   $rootScope.$on('$viewContentLoaded', function() {
+      $templateCache.removeAll();
+   });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -26,42 +37,42 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       controller: 'AppCtrl'
     })
 
-    .state('app.next-rides', {
-      url: "/next-rides",
+    .state('app.next-job', {
+      url: "/next-jobs",
       views: {
         'menuContent' :{
-          templateUrl: "templates/rides-next.html",
-          controller: 'NextRidesCtrl'
+          templateUrl: "templates/jobs-next.html",
+          controller: 'NextJobsCtrl'
         }
       }
     })
 
-    .state('app.current-ride', {
-      url: "/current-ride/:rideID",
+    .state('app.current-job', {
+      url: "/current-job/:jobId",
       views: {
         'menuContent' :{
-          templateUrl: "templates/rides-current.html",
-          controller: 'CurrentRideCtrl'
+          templateUrl: "templates/jobs-current.html",
+          controller: 'CurrentJobCtrl'
         }
       }
     })
 
-    .state('app.new-ride', {
-      url: "/new-ride",
+    .state('app.new-job', {
+      url: "/new-job",
       views: {
         'menuContent' :{
-          templateUrl: "templates/rides-new.html",
-          controller: 'NewRideCtrl'
+          templateUrl: "templates/jobs-new.html",
+          controller: 'NewJobCtrl'
         }
       }
     })
 
     .state('app.driver', {
-      url: "/employee",
+      url: "/employees",
       views: {
         'menuContent' :{
-          templateUrl: "templates/employee.html",
-          controller: 'EmployeeCtrl'
+          templateUrl: "templates/employees.html",
+          controller: 'EmployeesCtrl'
         }
       }
     })
@@ -74,8 +85,18 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
           controller: 'PauseCtrl'
         }
       }
+    })
+
+    .state('app.shift', {
+      url: "/shift",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/shift.html",
+          controller: 'ShiftCtrl'
+        }
+      }
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/next-rides');
+  $urlRouterProvider.otherwise('/app/employees');
 });
 

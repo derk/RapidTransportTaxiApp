@@ -1,0 +1,40 @@
+<ion-view title="Aktuelle Fahrt">
+  <ion-content class="has-header">
+    <div class="card">
+	  	<div class="item item-divider">
+	    	Zeit
+	  	</div>
+	  	<div class="item item-text-wrap">
+			<b>Beginn der Fahrt:</b> {{job.Departure | date:'dd.MM.yy HH:mm'}}
+	  	</div>
+	  	<div class="item item-divider">
+	    	Weg
+	  	</div>
+	  	<div class="item item-text-wrap">
+	  		<b>Start:</b> {{job.StartName}}<br>
+			<b>Ziel:</b> {{job.DestinationName}}
+	  	</div>
+
+	  	<div class="item item-divider">
+	    	Kosten
+	  	</div>
+	  	<div class="item">
+			<b>Geschätzt:</b> {{job.CostsEstimated | currency}}<br>
+			<b>Endgültig:</b> <input type="text" placeholder="Hier die engültigen Kosten eingeben" ng-model="job.CostsReal"/>
+	  	</div>
+  		<div class="item item-divider">
+    		Staumeldungen
+  		</div>
+  		<div class="item item-text-wrap">
+  			<span ng-if="warnings.length == 0">Auf der Route sind keine Verzögerungen in Sicht.</span>
+  			<span ng-repeat="warning in warnings">{{ warning }}</span>
+  		</div>
+		<button ng-if="!jobDone" ng-click=startJob() class="button button-full {{goStyle}}">
+			{{goLabel}}
+		</button>
+		<button ng-if="jobDone" ng-click=finishJob() class="button button-full {{goStyle}}">
+			Auftrag abschließen
+		</button>
+	</div>
+  </ion-content>
+</ion-view>

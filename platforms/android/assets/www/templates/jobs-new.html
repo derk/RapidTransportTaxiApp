@@ -1,0 +1,48 @@
+<ion-view title="Spontane Fahrt">
+  <ion-content class="has-header">
+    <form>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Start</span>
+        <input type="text" placeholder="Wo soll die Fahrt beginnen?" ng-autocomplete="autocomplete.startText" details="autocomplete.startDetails" options="options"/>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Ziel</span>
+        <input type="text" placeholder="Wo soll die Fahrt enden?" ng-autocomplete="autocomplete.destinationText" details="autocomplete.destinationDetails" options="options"/>
+      </label>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Anzahl der Personen</span>
+        <input type="number" placeholder="Wie viele Personen fahren mit?" ng-model="autocomplete.passengers"/>
+      </label>
+      <div class="padding">
+        <button class="button button-block button-positive" ng-click="addJob()">Fahrt erstellen</button>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>
+
+
+<script id="modal.html" type="text/ng-template">
+  <div class="modal">
+    <ion-header-bar class="bar-positive" ng-class="{'bar-positive': !modalData.error, 'bar-assertive': modalData.error}">
+      <h1 class="title">Ergebnis</h1>
+    </ion-header-bar>
+    <ion-content>
+        <div class="card">
+          <div class="item item-text-wrap" ng-repeat="message in modalData.localMessages">
+            <i ng-class="{'ion-information-circled': !message.error, 'ion-alert-circled': message.error}"> {{ message.text }}</i>
+          </div>
+        </div>
+        <div ng-if="modalDetails.hasServerMessages" class="padding">
+          <button class="button icon-right ion-chevron-right button-calm" ng-click="modalDetails = !modalDetails">Details anzeigen</button>
+        </div>
+        <div class="card" ng-if="modalDetails">
+          <div class="item item-text-wrap" ng-repeat="message in modalData.serverMessages">
+            {{ message.text }}
+          </div>
+        </div>
+        <div class="padding">
+          <button class="button button-block button-positive" ng-click="closeModal()"> OK</button>
+        </div>
+    </ion-content>
+  </div>
+</script>
